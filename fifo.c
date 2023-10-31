@@ -4,8 +4,13 @@ void queue_situation(OS kernel) /*Display queues situation on terminal*/
     print(kernel.new_jobs,"New queue -> ");
     print(kernel.ready,"Ready queue -> ");
     print(kernel.finished,"Finished queue -> ");
-    printf("Process running:%d\nRemaining Time:%d\n",kernel.executing.number,
-    kernel.executing.remaining_time);
+    print(kernel.blocked,"Blocked queue-> ");
+    if(kernel.executing!=NULL)
+    {
+        printf("Process running:%d\nRemaining Time:%d\n",kernel.executing->process.number,
+        kernel.executing->process.remaining_time);
+    }
+    else print(kernel.executing,"Executing-> ");
 }
 
 int pc(OS kernel) /*Counts how many processes have finished*/
@@ -28,7 +33,10 @@ void fifo(OS kernel,int proc_n) /*FCFS scheduling algorithm*/
         finish_job(&kernel,time);
         long_term(&kernel,time);
         go_processing(&kernel);
-        kernel.executing.remaining_time-=1;
+        if(kernel.executing!=NULL)
+        {
+            kernel.executing->process.remaining_time-=1;
+        }
         printf("---------------------------\nUnity time: %d\nSituation:\n",time);
         queue_situation(kernel);
         counter = pc(kernel);
@@ -52,5 +60,7 @@ int main(int argc , char *argv[])
     free(kernel.new_jobs);
     free(kernel.finished);
     free(kernel.ready);
+    free(kernel.blocked);
+    free(kernel.executing);
     return 0;
 }

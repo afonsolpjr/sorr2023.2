@@ -1,5 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+/*
+state 0 = not running
+state 1 = running
+state 2 = blocked
+*/
 typedef struct Process /*Structure of an process*/
 {
     int admission_time;
