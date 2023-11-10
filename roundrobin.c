@@ -1,9 +1,7 @@
-#include "structures.h"
+#include "queues.h"
+#define QUANTUM 4
 
-queue *trade_queue(queue **old,queue**newer) /*changes a process from an old queue to a new one*/
-{
-    Add_q(newer,pop(old));
-}
+/* Leitor de entradas */
 proc create_process(int number) /*Creates a single process*/
 {
     proc new_process;
@@ -11,5 +9,14 @@ proc create_process(int number) /*Creates a single process*/
     new_process.number=number;
     new_process.remaining_time=new_process.service_time;
     return new_process;
+}
+
+int main()
+{
+
+
+
+
+    return 0;
 }
 
