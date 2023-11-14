@@ -1,6 +1,12 @@
 #include "queues.h"
 #define QUANTUM 4
 
+void fifo (OS kernel,int proc_n)
+{
+    time=0;
+    finish_job(&kernel,time);
+    long_term(&kernel,time);
+}
 /* Leitor de entradas */
 proc create_process(int number) /*Creates a single process*/
 {

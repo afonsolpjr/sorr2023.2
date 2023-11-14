@@ -1,4 +1,7 @@
 #include "queues.h"
+#define disco 1
+#define fita 2
+#define impressora 3
 typedef struct Operational_system
 {
     queue *new_jobs;
@@ -61,8 +64,24 @@ void go_processing(OS *kernel) /*Changes a process from ready state to running s
     }
 }
 
-void IO_request(OS *kernel,int *time)
+void IO_request(OS *kernel,int tipo)
 {
-    Add_q(&kernel->blocked,kernel->executing->process);
+    switch(tipo)
+    kernel->executing->process.state = 3;
+    case disco
+    {
+        Add_q(&kernel->disco,kernel->executing->process);
+        break;
+    }
+    case fita
+    {
+        Add_q(&kernel->fita,kernel->executing->process);
+        break;
+    }
+    case impressora
+    {
+        Add_q(&kernel->impressora,kernel->executing->process);
+        break;
+    }
     kernel->executing = NULL;
 }
