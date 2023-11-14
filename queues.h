@@ -9,7 +9,7 @@ state 2 = blocked
 typedef struct Process /*Structure of an process*/
 {
     int admission_time;
-    int number;  /* renomear pra PID? */
+    int PID;  /* renomear pra PID? */
     int service_time;
     int remaining_time;
     int finish_time;
@@ -61,7 +61,7 @@ void print(queue *waiting,char *frase) /*Prints an queue from beginning to end*/
         printf("%s",frase);
         while(waiting!= NULL)
         {
-            printf("%d ",waiting->process.number);
+            printf("%d ",waiting->process.PID);
             waiting=waiting->next;
         }
     }
@@ -77,9 +77,4 @@ proc pop(queue**first) /*Pops a process out of an queue*/
     removido = (*first)->process;
     (*first) = (*first)->next;
     return removido;
-}
-
-void trade_queue(queue **old,queue**newer) /*changes a process from an old queue to a new one*/
-{
-    Add_q(newer,pop(old));
 }

@@ -9,7 +9,7 @@ A fazer:
     - [] Definir nova inicialização da estrutura do "OS"
     - [] Criar função pra checar se todas filas são nulas (terminação do programa)
 
- - [] Renomear process.number pra pid
+ - [X] Renomear process.number pra pid
  - [X] Ver redundância do trade_queue e add_q
  - [] Criar leitor de entradas (no scheduling.h)
  

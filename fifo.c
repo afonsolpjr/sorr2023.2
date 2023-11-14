@@ -7,7 +7,7 @@ void queue_situation(OS kernel) /*Display queues situation on terminal*/
     print(kernel.blocked,"Blocked queue-> ");
     if(kernel.executing!=NULL)
     {
-        printf("Process running:%d\nRemaining Time:%d\n",kernel.executing->process.number,
+        printf("Process running:%d\nRemaining Time:%d\n",kernel.executing->process.PID,
         kernel.executing->process.remaining_time);
     }
     else print(kernel.executing,"Executing-> ");
@@ -17,7 +17,7 @@ proc create_process(int number) /*Creates a single process*/
 {
     proc new_process;
     scanf("%d",&new_process.service_time);
-    new_process.number=number;
+    new_process.PID=number;
     new_process.remaining_time=new_process.service_time;
     return new_process;
 }
