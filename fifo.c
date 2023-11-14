@@ -1,4 +1,6 @@
 #include "OS.h"
+#include <string.h>
+#include <stdlib.h>
 void queue_situation(OS kernel) /*Display queues situation on terminal*/
 {
     print(kernel.new_jobs,"New queue -> ");
@@ -14,13 +16,58 @@ void queue_situation(OS kernel) /*Display queues situation on terminal*/
     else print(kernel.executing,"Executing-> ");
 }
 
-proc create_process(int number) /*Creates a single process*/
-{
-    proc new_process;
-    scanf("%d",&new_process.service_time);
-    new_process.PID=number;
-    new_process.remaining_time=new_process.service_time;
-    return new_process;
+proc create_process(int number, char * linha) /*Creates a single process*/
+{   
+    int i;
+    char *token;
+    int num_admissao, num_servico, instante, tipo;
+    io * new_io;
+    proc new_processo;
+    io * temp;
+
+    new_processo.PID=number;
+    token = strtok(linha, " ");
+    num_admissao = atoi(token);
+    new_processo.admission_time = num_admissao;
+    token = strtok(NULL, " ");
+    num_servico = atoi(token);
+    new_processo.service_time = num_servico;
+    new_processo.remaining_time=new_processo.service_time;
+    token = strtok(NULL, " ");
+    for(i=0; token != NULL; i++){
+        if(i % 2 == 0){
+            tipo = atoi(token);
+        } else{
+            instante = atoi(token);
+            new_io = (io*) malloc(sizeof(io));
+            new_io->tipo = tipo;
+            new_io->instante = instante;
+            new_io->prox_io = NULL;
+            if(new_processo.fila_io == NULL){
+                new_processo.fila_io = new_io;
+            } else{
+                temp = new_processo.fila_io;
+                while(temp->prox_io != NULL){
+                    temp=temp->prox_io;
+                }
+                temp->prox_io = new_io;
+            }
+        }
+        token = strtok(NULL, " ");
+    }
+
+    /*printf("PROCESSO CRIADO COM SUCESSO\n");
+    printf("--------------------------------\n");
+    printf("admissão: %d\ntempo de serviço: %d\npid: %d\nremaining time: %d", new_processo.admission_time, new_processo.service_time, new_processo.PID, new_processo.remaining_time);
+    printf("\nlista io:\n");
+    temp = new_processo.fila_io;
+    while(temp != NULL){
+        printf("tipo: %d instante: %d\n", temp->tipo, temp->instante);
+        temp=temp->prox_io;
+    }
+    printf("--------------------------------\n\n");*/
+    return new_processo;
+    
 }
 
 int pc(OS kernel) /*Counts how many processes have finished*/
@@ -56,9 +103,11 @@ void fifo(OS kernel,int proc_n) /*FCFS scheduling algorithm*/
 OS preparation(OS kernel,int number_process) /*Adds all the processes in the file "Processes" in the queue*/
 {
     int i;
+    char linha[100];
     for (i=0;i<number_process;i++)
     {
-        Add_q(&kernel.new_jobs,create_process(i)); /*Creates an process to be scheduled*/
+        fgets(linha, 100, stdin);
+        Add_q(&kernel.new_jobs,create_process(i, linha)); /*Creates an process to be scheduled*/
     }
     return kernel;
 }
