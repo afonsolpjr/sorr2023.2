@@ -91,3 +91,27 @@ void IO_request(OS *kernel,int tipo)
     }
     kernel->executing = NULL;
 }
+
+void atualizar_tempo_io(OS *kernel) {
+    if(kernel->impressora!=NULL){
+        kernel->impressora->process.tempo_restante_io--;
+        if(kernel->impressora->process.tempo_restante_io == 0){
+            Add_q(&kernel->p_alta, pop(&kernel->impressora));
+        }
+    }
+
+    if(kernel->disco!=NULL){
+        kernel->disco->process.tempo_restante_io--;
+        if(kernel->disco->process.tempo_restante_io == 0){
+            Add_q(&kernel->p_baixa, pop(&kernel->disco));
+        }
+    }
+
+    if(kernel->fita!=NULL){
+        kernel->fita->process.tempo_restante_io--;
+        if(kernel->fita->process.tempo_restante_io == 0){
+            Add_q(&kernel->p_alta, pop(&kernel->fita));
+        }
+    }
+    
+}
