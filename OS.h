@@ -113,5 +113,15 @@ void atualizar_tempo_io(OS *kernel) {
             Add_q(&kernel->p_alta, pop(&kernel->fita));
         }
     }
+}
+
+int verifica_filas_vazias(OS *kernel) {
+    if(kernel->p_alta == NULL && kernel->p_baixa == NULL && kernel->new_jobs == NULL
+    && kernel->blocked == NULL && kernel->disco == NULL && kernel->fita == NULL &&
+    kernel->impressora == NULL && kernel->executing == NULL)
+        return 1;
+    else
+        return 0;
+    
     
 }
