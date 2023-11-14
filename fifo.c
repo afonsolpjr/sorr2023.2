@@ -113,10 +113,12 @@ OS preparation(OS kernel,int number_process) /*Adds all the processes in the fil
 }
 int main(int argc , char *argv[])
 {
+    int qtd_proc;
+    scanf("%d\n", &qtd_proc);
     OS kernel;
     kernel = start_OS();
-    kernel = preparation(kernel,5);
-    fifo(kernel,5);
+    kernel = preparation(kernel,qtd_proc);
+    fifo(kernel,qtd_proc);
     free(kernel.new_jobs);
     free(kernel.finished);
     free(kernel.p_alta);
