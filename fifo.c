@@ -2,7 +2,8 @@
 void queue_situation(OS kernel) /*Display queues situation on terminal*/
 {
     print(kernel.new_jobs,"New queue -> ");
-    print(kernel.ready,"Ready queue -> ");
+    print(kernel.p_alta,"p_alta queue -> ");
+    print(kernel.p_baixa,"p_baixa queue -> ");
     print(kernel.finished,"Finished queue -> ");
     print(kernel.blocked,"Blocked queue-> ");
     if(kernel.executing!=NULL)
@@ -39,6 +40,7 @@ void fifo(OS kernel,int proc_n) /*FCFS scheduling algorithm*/
     while(counter!= proc_n)
     {
         time++;
+        
         finish_job(&kernel,time);
         long_term(&kernel,time);
         go_processing(&kernel);
@@ -68,7 +70,7 @@ int main(int argc , char *argv[])
     fifo(kernel,5);
     free(kernel.new_jobs);
     free(kernel.finished);
-    free(kernel.ready);
+    free(kernel.p_alta);
     free(kernel.blocked);
     free(kernel.executing);
     return 0;

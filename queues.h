@@ -14,6 +14,7 @@ typedef struct Process /*Structure of an process*/
     int remaining_time;
     int finish_time;
     int state;
+    int tempo_espera; /*Tempo na fila de baixa prioridade, incrementado a cada unidade de tempo, sobe a cada 10*/
 }proc;
 
 typedef struct Queue /*Queue data structure*/

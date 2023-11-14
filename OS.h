@@ -1,13 +1,12 @@
 #include "queues.h"
-#define disco 1
-#define fita 2
-#define impressora 3
+#define DISCO 1
+#define FITA 2
+#define IMPRESSORA 3
 typedef struct Operational_system
 {
     queue *new_jobs;
     queue *p_alta;
     queue *p_baixa;
-    queue *ready;
     queue *finished;
     queue *blocked;
     queue *disco;
@@ -23,7 +22,6 @@ OS start_OS() /*Starts all the values default values*/
     kernel.p_alta=NULL;
     kernel.p_baixa=NULL;
     kernel.new_jobs = NULL;
-    kernel.ready = NULL;
     kernel.blocked = NULL;
     kernel.disco=NULL;
     kernel.fita=NULL;
@@ -51,37 +49,45 @@ void long_term(OS *kernel, int time) /*Changes a process from new state to ready
 
     if(kernel->new_jobs!=NULL)
     {
-        Add_q(&kernel->ready,pop(&kernel->new_jobs));
+        Add_q(&kernel->p_alta,pop(&kernel->new_jobs));
     }
 }
 
 void go_processing(OS *kernel) /*Changes a process from ready state to running state*/
 {
-    if(kernel->ready!=NULL && kernel->executing == NULL)
+    if(kernel->p_alta!=NULL && kernel->executing == NULL)
     {
-        Add_q(&kernel->executing,pop(&kernel->ready));
+        Add_q(&kernel->executing,pop(&kernel->p_alta));
         kernel->executing->process.state=1;
     }
+    else if(kernel -> p_baixa!=NULL && kernel -> executing == NULL)
+    {
+        Add_q(&kernel->executing,pop(&kernel->p_baixa));
+        kernel->executing->process.state=1;
+    }
+    
 }
 
 void IO_request(OS *kernel,int tipo)
 {
-    switch(tipo)
     kernel->executing->process.state = 3;
-    case disco
+    switch(tipo)
     {
-        Add_q(&kernel->disco,kernel->executing->process);
-        break;
-    }
-    case fita
-    {
-        Add_q(&kernel->fita,kernel->executing->process);
-        break;
-    }
-    case impressora
-    {
-        Add_q(&kernel->impressora,kernel->executing->process);
-        break;
+        case(DISCO):
+        
+            Add_q(&kernel->disco,kernel->executing->process);
+            break;
+        
+        case(FITA) :
+        
+            Add_q(&kernel->fita,kernel->executing->process);
+            break;
+        
+        case(IMPRESSORA) :
+        
+            Add_q(&kernel->impressora,kernel->executing->process);
+            break;
+        
     }
     kernel->executing = NULL;
 }

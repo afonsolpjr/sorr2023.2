@@ -62,3 +62,4 @@ Duvidas :
 
  Premissas
     - Processos sem prioridade inerente (todos chegam com a mesma propriedade)
+    - Processos esperando há mais de 10 unidades na fila de baixa prioridade sobem pra fila de alta prioridade
