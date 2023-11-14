@@ -2,9 +2,14 @@
 typedef struct Operational_system
 {
     queue *new_jobs;
+    queue *p_alta;
+    queue *p_baixa;
     queue *ready;
     queue *finished;
     queue *blocked;
+    queue *disco;
+    queue *fita;
+    queue *impressora;
     queue *executing;
 } OS;
 
@@ -12,9 +17,14 @@ OS start_OS() /*Starts all the values default values*/
 {
     OS kernel;
     kernel.finished= NULL;
+    kernel.p_alta=NULL;
+    kernel.p_baixa=NULL;
     kernel.new_jobs = NULL;
     kernel.ready = NULL;
     kernel.blocked = NULL;
+    kernel.disco=NULL;
+    kernel.fita=NULL;
+    kernel.impressora=NULL;
     kernel.executing = NULL;
     return kernel;
 }

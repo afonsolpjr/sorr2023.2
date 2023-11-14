@@ -1,12 +1,12 @@
 A fazer:
  - [] Criar filas
-    - [] Alta prioridade
-    - [] Baixa prioridade
-    - [] I/O Disco
-    - [] IO Fita
-    - [] IO Impressora
-    - [] Definir na estrutura do "OS" as novas filas criadas
-    - [] Definir nova inicialização da estrutura do "OS"
+    - [X] Alta prioridade
+    - [X] Baixa prioridade
+    - [X] I/O Disco
+    - [X] IO Fita
+    - [X] IO Impressora
+    - [X] Definir na estrutura do "OS" as novas filas criadas
+    - [X] Definir nova inicialização da estrutura do "OS"
     - [] Criar função pra checar se todas filas são nulas (terminação do programa)
 
  - [X] Renomear process.number pra pid
@@ -58,7 +58,7 @@ MACROS:
     - tempo de io
 
 Duvidas :
- - Prioridade do processo muda? Como vai funcionar?
+ - Prioridade do processo muda? Como vai funcionar? Sim, dinâmico
 
  Premissas
     - Processos sem prioridade inerente (todos chegam com a mesma propriedade)
