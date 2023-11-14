@@ -10,7 +10,7 @@ A fazer:
     - [] Criar função pra checar se todas filas são nulas (terminação do programa)
 
  - [] Renomear process.number pra pid
- - [] Ver redundância do trade_queue e add_q
+ - [X] Ver redundância do trade_queue e add_q
  - [] Criar leitor de entradas (no scheduling.h)
  
 

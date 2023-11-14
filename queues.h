@@ -79,7 +79,7 @@ proc pop(queue**first) /*Pops a process out of an queue*/
     return removido;
 }
 
-queue *trade_queue(queue **old,queue**newer) /*changes a process from an old queue to a new one*/
+void trade_queue(queue **old,queue**newer) /*changes a process from an old queue to a new one*/
 {
     Add_q(newer,pop(old));
 }

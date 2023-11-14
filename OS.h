@@ -1,4 +1,4 @@
-#include "scheduling.h"
+#include "queues.h"
 typedef struct Operational_system
 {
     queue *new_jobs;
@@ -38,7 +38,7 @@ void long_term(OS *kernel, int time) /*Changes a process from new state to ready
 
     if(kernel->new_jobs!=NULL)
     {
-        trade_queue(&kernel->new_jobs,&kernel->ready);
+        Add_q(&kernel->ready,pop(&kernel->new_jobs));
     }
 }
 
