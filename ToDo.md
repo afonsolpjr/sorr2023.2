@@ -55,7 +55,9 @@ MACROS: - quantum - status - tempo de io
     - [X] Implementar diferentes tempos de admissão do processo
     - [] Colocar create_process no aquivo correto
     - [] Checar quais filas estão sendo usadas para poder retirar as que não estão
+        - a "blocked" não é utilizada
     - [] Dar free nas que foram alocadas no programa
+        - acho que o local propicio pra isso é no finishing_job, ne?
     - [] Definir MACROS de status
 Duvidas :
 
