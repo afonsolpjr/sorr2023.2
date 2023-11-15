@@ -114,18 +114,13 @@ void RoundRobin (OS kernel)
     {
         finish_job(&kernel,time); /*retirar o processo da CPU finalizando-o*/
         long_term(&kernel,time); /*Admite processos na fila de mais alta prioridade*/
-        puts("ERRO AQUI1");
         atualizar_tempo_io(&kernel); /* retirar processos da fila de bloqueio*/
-        puts("ERRO AQUI2");
         if(slice == QUANTUM)
         {
             preempt(&kernel);
             slice = 0;
         }
-
-        puts("ERRO AQUI3");
         sobe_prioridade(&kernel,QUANTUM);
-        puts("ERRO AQUI4");
         go_processing(&kernel); /* aloca novos processos no processador*/
         if((&kernel)->executing != NULL)
         {

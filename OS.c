@@ -30,13 +30,13 @@ void finish_job(OS *kernel, int time) /*Changes a job from processor to finished
 
 void long_term(OS *kernel, int time) /*Changes a process from new state to ready state*/
 {
-
     if(kernel->new_jobs!=NULL)
     {
         while(kernel->new_jobs->process.admission_time == time)
         {
             kernel->new_jobs->process.state=PRONTO;
             Add_q(&kernel->p_alta,pop(&kernel->new_jobs));
+            if(kernel->new_jobs==NULL) break;
         }
     }
 }
