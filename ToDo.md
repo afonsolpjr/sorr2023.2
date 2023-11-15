@@ -66,3 +66,7 @@ Duvidas :
 
 Premissas - Processos sem prioridade inerente (todos chegam com a mesma prioriedade) 
 - Processos esperando há mais de QUANTUM * 5 unidades na fila de baixa prioridade sobem pra fila de alta prioridade
+
+Possiveis Adições:
+    -[]Filas da memória estáticas
+    -[]Processos Suspensos
