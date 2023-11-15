@@ -1,4 +1,4 @@
-#include "queues.h"
+#include "queues.c"
 #define DISCO 1
 #define FITA 2
 #define IMPRESSORA 3

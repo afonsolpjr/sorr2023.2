@@ -27,7 +27,7 @@ Enquanto todas filas não são nulas:
 
 
     - Gerenciando outras filas:
-        - [X] Ver se tem algum algum processo a ser admitido na fila de prontos
+        - [] Ver se tem algum algum processo a ser admitido na fila de prontos
 
 
         - [X] Verificar se algum processo sairá das 3 filas de I/O

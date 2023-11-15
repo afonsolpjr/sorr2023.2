@@ -33,6 +33,12 @@ void long_term(OS *kernel, int time) /*Changes a process from new state to ready
 
     if(kernel->new_jobs!=NULL)
     {
+    
+
+
+
+
+        
         Add_q(&kernel->p_alta,pop(&kernel->new_jobs));
     }
 }

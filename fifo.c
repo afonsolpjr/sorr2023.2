@@ -1,4 +1,4 @@
-#include "OS.h"
+#include "OS.c"
 #include <string.h>
 #include <stdlib.h>
 void queue_situation(OS kernel) /*Display queues situation on terminal*/
@@ -104,11 +104,45 @@ OS preparation(OS kernel,int number_process) /*Adds all the processes in the fil
 {
     int i;
     char linha[100];
+    proc new_proc;
+    queue *to_add;
+    queue *check;
     for (i=0;i<number_process;i++)
     {
         fgets(linha, 100, stdin);
-        Add_q(&kernel.new_jobs,create_process(i, linha)); /*Creates an process to be scheduled*/
+        new_proc = create_process(i,linha);
+
+        /* Insertion Sort on new_jobs queue*/
+        to_add = new_q(new_proc);
+        if(kernel.new_jobs==NULL)
+        {
+            kernel.new_jobs = to_add;
+        }
+        else
+        {
+            if(new_proc.admission_time < kernel.new_jobs->process.admission_time)
+            {
+                to_add->next = kernel.new_jobs;
+                kernel.new_jobs = to_add;
+            }
+            else
+            {
+                check = kernel.new_jobs;
+                while(check->next!=NULL 
+                && new_proc.admission_time>=check->next->process.admission_time)
+                {
+                    check = check->next;
+                }
+                to_add->next= check->next;
+                check->next = to_add;
+            }
+            
+        }
+        // Add_q(&kernel.new_jobs,create_process(i, linha)); /*Creates an process to be scheduled*/
     }
+
+
+    
     return kernel;
 }
 int main(int argc , char *argv[])
