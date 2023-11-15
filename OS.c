@@ -117,8 +117,11 @@ int verifica_filas_vazias(OS *kernel) {
 
 void preempt(OS *kernel)
 {
-    kernel->executing->process.state=PRONTO;
-    Add_q(&kernel->p_baixa,pop(&kernel->executing));
+    if(kernel ->executing !=NULL)
+    {
+        kernel->executing->process.state=PRONTO;
+        Add_q(&kernel->p_baixa,pop(&kernel->executing));
+    }
 }
 
 void sobe_prioridade(OS *kernel, int quantum)

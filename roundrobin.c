@@ -106,34 +106,34 @@ OS preparation(OS kernel,int number_process) /*Adds all the processes in the fil
     return kernel;
 }
 
-void RoundRobin (OS *kernel)
+void RoundRobin (OS kernel)
 {
     int time=0;
     int slice=0;
-    while(verifica_filas_vazias(kernel)==0)
+    while(verifica_filas_vazias(&kernel)==0)
     {
-        finish_job(kernel,time); /*retirar o processo da CPU finalizando-o*/
-        long_term(kernel,time); /*Admite processos na fila de mais alta prioridade*/
+        finish_job(&kernel,time); /*retirar o processo da CPU finalizando-o*/
+        long_term(&kernel,time); /*Admite processos na fila de mais alta prioridade*/
         puts("ERRO AQUI1");
-        atualizar_tempo_io(kernel); /* retirar processos da fila de bloqueio*/
+        atualizar_tempo_io(&kernel); /* retirar processos da fila de bloqueio*/
         puts("ERRO AQUI2");
         if(slice == QUANTUM)
         {
-            preempt(kernel);
+            preempt(&kernel);
             slice = 0;
         }
 
         puts("ERRO AQUI3");
-        sobe_prioridade(kernel,QUANTUM);
+        sobe_prioridade(&kernel,QUANTUM);
         puts("ERRO AQUI4");
-        go_processing(kernel); /* aloca novos processos no processador*/
-        if(kernel->executing != NULL)
+        go_processing(&kernel); /* aloca novos processos no processador*/
+        if((&kernel)->executing != NULL)
         {
-            kernel->executing->process.remaining_time-=1;
+            (&kernel)->executing->process.remaining_time-=1;
         }
         time++;
         slice++;
-        queue_situation(*kernel,time,slice);
+        queue_situation(kernel,time,slice);
     }
 }
 
@@ -144,7 +144,7 @@ int main()
     scanf("%d\n", &qtd_proc);
     kernel = start_OS();
     kernel = preparation(kernel,qtd_proc);
-    RoundRobin(&kernel);
+    RoundRobin(kernel);
 
     free(kernel.finished);
     free(kernel.p_alta);
