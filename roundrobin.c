@@ -1,9 +1,9 @@
-#include "queues.h"
+#include "OS.h"
 #define QUANTUM 4
 
 void fifo (OS kernel,int proc_n)
 {
-    time=0;
+    int time=0;
     finish_job(&kernel,time);
     long_term(&kernel,time);
 }
