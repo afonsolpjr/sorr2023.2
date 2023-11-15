@@ -14,6 +14,7 @@ OS start_OS() /*Starts all the values default values*/
     kernel.executing = NULL;
     return kernel;
 }
+
 void finish_job(OS *kernel, int time) /*Changes a job from processor to finished queue*/
 {
     if(kernel->executing!=NULL)
@@ -105,6 +106,9 @@ int verifica_filas_vazias(OS *kernel) {
         return 1;
     else
         return 0;
-    
-    
+}
+
+void preempt(OS *kernel)
+{
+
 }

@@ -20,5 +20,7 @@ void finish_job(OS *kernel, int time);/*Changes a job from processor to finished
 void long_term(OS *kernel, int time); /*Changes a process from new state to ready state*/
 void go_processing(OS *kernel); /*Changes a process from ready state to running state*/
 void IO_request(OS *kernel,int tipo); /*Trata o pedido de IO do processo*/
-void atualizar_tempo_io(OS *kernel); /*Atualiza o tempo de IO dos processos que estão nas filas*/
+void atualizar_tempo_io(OS *kernel); /*Atualiza o tempo de IO dos processos que estão nas filas 
+e se terminar manda pra fila correta*/
 int verifica_filas_vazias(OS *kernel); /*Verifica se todas as filas estão vazias*/
+void preempt(OS *kernel); /*Retira o programa do processador e coloca na fila de baixa prioridade*/

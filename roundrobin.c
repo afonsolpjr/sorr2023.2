@@ -1,11 +1,28 @@
 #include "OS.h"
 #define QUANTUM 4
 
-void fifo (OS kernel,int proc_n)
+void RoundRobin (OS *kernel,int proc_n)
 {
     int time=0;
-    finish_job(&kernel,time);
-    long_term(&kernel,time);
+    int slice=0;
+    while(verifica_filas_vazias(kernel))
+    {
+        finish_job(kernel,time); /*retirar o processo da CPU finalizando-o*/
+        long_term(kernel,time); /*Admite processos na fila de mais alta prioridade*/
+        verifica_filas_vazias(kernel); /*Faz o gerenciamento de IO*/
+        if(slice == QUANTUM)
+        {
+            preempt(kernel);
+            slice = 0;
+        }
+        go_processing(kernel);
+        if(kernel->executing == NULL)
+        {
+            kernel->executing->process.remaining_time-=1;
+        }
+        time++;
+
+    }
 }
 /* Leitor de entradas */
 proc create_process(int number) /*Creates a single process*/
@@ -19,9 +36,6 @@ proc create_process(int number) /*Creates a single process*/
 
 int main()
 {
-
-
-
 
     return 0;
 }
