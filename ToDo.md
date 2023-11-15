@@ -50,8 +50,9 @@ Enquanto todas filas não são nulas:
 MACROS: - quantum - status - tempo de io
 
     - [] Implementar mudança de fila do processo quando ele espera por mais de 10 unidades de tempo
-    - [] Implementar Preempt (Retirar o processo de execução e colocar na baixa prioridade)
-    - [] Implementar diferentes tempos de admissão do processo
+    - [X] Implementar Preempt (Retirar o processo de execução e colocar na baixa prioridade)
+        - mano foi só uma linha kkk
+    - [X] Implementar diferentes tempos de admissão do processo
     - [] Colocar create_process no aquivo correto
     - [] Checar quais filas estão sendo usadas para poder retirar as que não estão
     - [] Dar free nas que foram alocadas no programa

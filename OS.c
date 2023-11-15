@@ -111,5 +111,5 @@ int verifica_filas_vazias(OS *kernel) {
 
 void preempt(OS *kernel)
 {
-
+    Add_q(&kernel->p_baixa,pop(&kernel->executing));
 }

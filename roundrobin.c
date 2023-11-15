@@ -9,14 +9,14 @@ void RoundRobin (OS *kernel,int proc_n)
     {
         finish_job(kernel,time); /*retirar o processo da CPU finalizando-o*/
         long_term(kernel,time); /*Admite processos na fila de mais alta prioridade*/
-        verifica_filas_vazias(kernel); /*Faz o gerenciamento de IO*/
+        atualizar_tempo_io(kernel); /* retirar processos da fila de bloqueio*/
         if(slice == QUANTUM)
         {
             preempt(kernel);
             slice = 0;
         }
-        go_processing(kernel);
-        if(kernel->executing == NULL)
+        go_processing(kernel); /* aloca novos processos no processador*/
+        if(kernel->executing != NULL)
         {
             kernel->executing->process.remaining_time-=1;
         }
