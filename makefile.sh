@@ -1,3 +1,3 @@
 clear
-gcc -o fila queues.h queues.c OS.h OS.c fifo.c -Wall -pedantic -ansi
-time ./fila
+gcc -o rr queues.h queues.c OS.h OS.c roundrobin.c -Wall -pedantic -ansi
+time ./rr

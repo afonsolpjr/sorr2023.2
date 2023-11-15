@@ -1,8 +1,9 @@
 #include "OS.h"
 #include <string.h>
 #define QUANTUM 4
-void queue_situation(OS kernel) /*Display queues situation on terminal*/
+void queue_situation(OS kernel,int time,int quantum) /*Display queues situation on terminal*/
 {
+    printf("---------------------------\nTempo corrido: %d\nQuantum: %d\nSituation:\n",time,quantum);
     print(kernel.new_jobs,"New queue -> ");
     print(kernel.p_alta,"p_alta queue -> ");
     print(kernel.p_baixa,"p_baixa queue -> ");
@@ -57,17 +58,6 @@ proc create_process(int number, char * linha) /*Creates a single process*/
         }
         token = strtok(NULL, " ");
     }
-
-    /*printf("PROCESSO CRIADO COM SUCESSO\n");
-    printf("--------------------------------\n");
-    printf("admissão: %d\ntempo de serviço: %d\npid: %d\nremaining time: %d", new_processo.admission_time, new_processo.service_time, new_processo.PID, new_processo.remaining_time);
-    printf("\nlista io:\n");
-    temp = new_processo.fila_io;
-    while(temp != NULL){
-        printf("tipo: %d instante: %d\n", temp->tipo, temp->instante);
-        temp=temp->prox_io;
-    }
-    printf("--------------------------------\n\n");*/
     return new_processo;
     
 }
@@ -120,7 +110,7 @@ void RoundRobin (OS *kernel)
 {
     int time=0;
     int slice=0;
-    while(verifica_filas_vazias(kernel))
+    while(verifica_filas_vazias(kernel)==0)
     {
         finish_job(kernel,time); /*retirar o processo da CPU finalizando-o*/
         long_term(kernel,time); /*Admite processos na fila de mais alta prioridade*/
@@ -138,6 +128,7 @@ void RoundRobin (OS *kernel)
         }
         time++;
         slice++;
+        queue_situation(*kernel,time,slice);
     }
 }
 
@@ -148,8 +139,7 @@ int main()
     scanf("%d\n", &qtd_proc);
     kernel = start_OS();
     kernel = preparation(kernel,qtd_proc);
-
-    /*RoundRobin(&kernel);*/
+    RoundRobin(&kernel);
 
     free(kernel.finished);
     free(kernel.p_alta);
