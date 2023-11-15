@@ -27,11 +27,11 @@ Enquanto todas filas não são nulas:
 
 
     - Gerenciando outras filas:
-        - [] Ver se tem algum algum processo a ser admitido na fila de prontos
+        - [X] Ver se tem algum algum processo a ser admitido na fila de prontos
 
 
-        - [X] Verificar se algum processo sairá das 3 filas de I/O
-            - [X] Mandar pras filas corretas de acordo com tipo de io
+        - [] Verificar se algum processo sairá das 3 filas de I/O
+            - [] Mandar pras filas corretas de acordo com tipo de io
 
 
         - [X] Ve se o slice terminou (slice==QUANTUM)
