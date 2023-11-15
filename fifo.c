@@ -7,7 +7,9 @@ void queue_situation(OS kernel) /*Display queues situation on terminal*/
     print(kernel.p_alta,"p_alta queue -> ");
     print(kernel.p_baixa,"p_baixa queue -> ");
     print(kernel.finished,"Finished queue -> ");
-    print(kernel.blocked,"Blocked queue-> ");
+    print(kernel.impressora,"Impressora queue-> ");
+    print(kernel.fita,"Fita queue-> ");
+    print(kernel.disco,"Disco queue-> ");
     if(kernel.executing!=NULL)
     {
         printf("Process running:%d\nRemaining Time:%d\n",kernel.executing->process.PID,
@@ -140,8 +142,6 @@ OS preparation(OS kernel,int number_process) /*Adds all the processes in the fil
         }
         // Add_q(&kernel.new_jobs,create_process(i, linha)); /*Creates an process to be scheduled*/
     }
-
-
     
     return kernel;
 }
@@ -156,7 +156,6 @@ int main(int argc , char *argv[])
     free(kernel.new_jobs);
     free(kernel.finished);
     free(kernel.p_alta);
-    free(kernel.blocked);
     free(kernel.executing);
     return 0;
 }

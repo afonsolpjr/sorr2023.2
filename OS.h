@@ -1,14 +1,17 @@
-#include "queues.c"
+#include "queues.h"
 #define DISCO 1
 #define FITA 2
 #define IMPRESSORA 3
+#define PRONTO 0
+#define RODANDO 1
+#define IO 2
+#define TERMINADO 3
 typedef struct Operational_system
 {
     queue *new_jobs;
     queue *p_alta;
     queue *p_baixa;
     queue *finished;
-    queue *blocked;
     queue *disco;
     queue *fita;
     queue *impressora;
@@ -24,3 +27,4 @@ void atualizar_tempo_io(OS *kernel); /*Atualiza o tempo de IO dos processos que 
 e se terminar manda pra fila correta*/
 int verifica_filas_vazias(OS *kernel); /*Verifica se todas as filas estão vazias*/
 void preempt(OS *kernel); /*Retira o programa do processador e coloca na fila de baixa prioridade*/
+void sobe_prioridade(OS *kernel, int quantum); /*Se o processo estiver a mais de 5*QUANTUM esperando na fila de baixa prioridade, sobe pra de alta*/
