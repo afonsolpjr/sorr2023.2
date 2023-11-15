@@ -123,15 +123,18 @@ void preempt(OS *kernel)
 
 void sobe_prioridade(OS *kernel, int quantum)
 {
-    while(kernel->p_baixa->next!=NULL)
+    if(kernel->p_baixa != NULL)
     {
-        if(kernel->p_baixa->process.tempo_espera == quantum*5)
+        while(kernel->p_baixa->next!=NULL)
         {
-            Add_q(&kernel->p_alta,pop(&kernel->p_baixa));
-        }
-        else
-        {
-            break;
+            if(kernel->p_baixa->process.tempo_espera == quantum*5)
+            {
+                Add_q(&kernel->p_alta,pop(&kernel->p_baixa));
+            }
+            else
+            {
+                break;
+            }
         }
     }
 }
