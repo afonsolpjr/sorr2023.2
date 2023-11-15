@@ -1,37 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "queues.h"
 /*
 state 0 = not running
 state 1 = running
 state 2 = blocked
 */
-typedef struct Process /*Structure of an process*/
-{
-    int admission_time;
-    int PID;  /* renomear pra PID? */
-    int service_time;
-    int remaining_time;
-    int finish_time;
-    int state;
-    int tempo_espera; /*Tempo na fila de baixa prioridade, incrementado a cada unidade de tempo, sobe a cada 10*/
-    int tempo_restante_io;
-    struct IO * fila_io;
-}proc;
-
-typedef struct IO
-{
-    int tipo;
-    int instante;
-    struct IO *prox_io;
-} io;
-
-typedef struct Queue /*Queue data structure*/
-{
-    proc process;
-    struct Queue* next;
-}queue;
-
 queue *new_q(proc process) /*Creates a new queue*/
 {
     queue *newer;
