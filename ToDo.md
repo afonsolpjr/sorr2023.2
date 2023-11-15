@@ -60,4 +60,5 @@ Duvidas :
 
 - Prioridade do processo muda? Como vai funcionar? Sim, dinâmico
 
-Premissas - Processos sem prioridade inerente (todos chegam com a mesma propriedade) - Processos esperando há mais de 10 unidades na fila de baixa prioridade sobem pra fila de alta prioridade
+Premissas - Processos sem prioridade inerente (todos chegam com a mesma prioriedade) 
+- Processos esperando há mais de 10 unidades na fila de baixa prioridade sobem pra fila de alta prioridade
