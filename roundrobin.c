@@ -6,13 +6,13 @@
 void queue_situation(OS kernel,int time,int quantum) 
 {
     printf("---------------------------\nTempo corrido: %d\nQuantum: %d\nSituation:\n",time,quantum);
-    print(kernel.new_jobs,"New queue -> ");
+    printc(kernel.new_jobs,"New queue -> ");
     print(kernel.p_alta,"p_alta queue -> ");
     print(kernel.p_baixa,"p_baixa queue -> ");
-    print(kernel.finished,"Finished queue -> ");
-    print(kernel.impressora,"Impressora queue-> ");
-    print(kernel.fita,"Fita queue-> ");
-    print(kernel.disco,"Disco queue-> ");
+    printc(kernel.finished,"Finished queue -> ");
+    printc(kernel.impressora,"Impressora queue-> ");
+    printc(kernel.fita,"Fita queue-> ");
+    printc(kernel.disco,"Disco queue-> ");
     if(kernel.executing!=NULL)
     {
         printf("Process running:%d\nRemaining Time:%d\n",kernel.executing->process.PID,

@@ -43,14 +43,14 @@ void Add_q(queue **first,proc process)
 }
 
 /*Prints an queue from beginning to end*/
-void print(queue *waiting,char *frase) {
-    if(waiting !=NULL)
+void print(queue *imprimir,char *frase) {
+    if(imprimir !=NULL)
     {
         printf("%s",frase);
-        while(waiting!= NULL)
+        while(imprimir!= NULL)
         {
-            printf("%d ",waiting->process.PID);
-            waiting=waiting->next;
+            printf("%d ",imprimir->process.PID);
+            imprimir=imprimir->next;
         }
     }
     else
@@ -59,7 +59,13 @@ void print(queue *waiting,char *frase) {
     }
         puts("");
 }
-
+void printc(queue *imprimir,char *frase)
+{
+    if(imprimir != NULL)
+    {
+        print(imprimir,frase);
+    }
+}
 /*Pops a process out of an queue*/
 proc pop(queue**first) 
 {
