@@ -56,30 +56,49 @@ void go_processing(OS *kernel) /*Changes a process from ready state to running s
     
 }
 
+
 void IO_request(OS *kernel,int tipo)
 {
     kernel->executing->process.state = TERMINADO;
     switch(tipo)
     {
         case(DISCO):
-        
+            kernel->executing->process.tempo_restante_io=T_DISCO;
             Add_q(&kernel->disco,kernel->executing->process);
+            popIO(&kernel->disco->process.fila_io);
             break;
         
         case(FITA) :
-        
+            kernel->executing->process.tempo_restante_io=T_FITA;
             Add_q(&kernel->fita,kernel->executing->process);
+            popIO(&kernel->fita->process.fila_io);
             break;
         
         case(IMPRESSORA) :
-        
+            kernel->executing->process.tempo_restante_io=T_IMPRESSORA;
             Add_q(&kernel->impressora,kernel->executing->process);
+            popIO(&kernel->impressora->process.fila_io);
             break;
         
     }
     kernel->executing = NULL;
 }
 
+void verifica_request(OS *kernel)
+{
+    int tempo_executando;
+    if(kernel->executing!=NULL)
+    {
+        if(kernel->executing->process.fila_io!=NULL)
+        {
+            tempo_executando = kernel->executing->process.service_time-kernel->executing->process.remaining_time;
+            if(tempo_executando == kernel->executing->process.fila_io->instante)
+            {
+                IO_request(kernel,kernel->executing->process.fila_io->tipo);
+            }
+        }
+    }
+}
 void atualizar_tempo_io(OS *kernel) {
     if(kernel->impressora!=NULL){
         kernel->impressora->process.tempo_restante_io--;

@@ -6,6 +6,9 @@
 #define RODANDO 1
 #define IO 2
 #define TERMINADO 3
+#define T_DISCO 5
+#define T_FITA 10
+#define T_IMPRESSORA 15
 
 typedef struct Operational_system
 {
@@ -29,3 +32,4 @@ e se terminar manda pra fila correta*/
 int verifica_filas_vazias(OS *kernel); /*Verifica se todas as filas estão vazias*/
 void preempt(OS *kernel); /*Retira o programa do processador e coloca na fila de baixa prioridade*/
 void sobe_prioridade(OS *kernel, int quantum); /*Se o processo estiver a mais de 5*QUANTUM esperando na fila de baixa prioridade, sobe pra de alta*/
+void verifica_request(OS *kernel); /*Verifica se o processo pediu IO*/

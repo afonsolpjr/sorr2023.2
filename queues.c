@@ -22,23 +22,23 @@ queue *new_q(proc process)
 }
 
  /*Adds a new process to an queue, or creates an queue if there isn't one*/
-void Add_q(queue **first,proc process)
+void Add_q(queue **nova,proc process)
 {
-    if(*first==NULL)
+    if(*nova==NULL)
     {
-        *first = new_q(process);
+        *nova = new_q(process);
     }
     
     else
     {
-        queue *check = *first;
-        queue **save = first;
+        queue *check = *nova;
+        queue **save = nova;
         while((*save)->next!= NULL)
         {
             (*save) = (*save)->next;
         }
         (*save)->next=new_q(process);
-        *first = check;
+        *nova = check;
     }
 }
 
@@ -72,5 +72,13 @@ proc pop(queue**first)
     proc removido;
     removido = (*first)->process;
     (*first) = (*first)->next;
+    return removido;
+}
+
+io popIO(io **sai)
+{
+    io removido;
+    removido = **sai;
+    (*sai) = (*sai)->prox_io;
     return removido;
 }

@@ -74,5 +74,5 @@ Possiveis Adições:
 Conserto:
 
 [] Criar função de ordenação
-[] Comparar o tempo decorrido do processo com o tempo do pedido de IO
-[] Definir tempos dos IO
+[X] Comparar o tempo decorrido do processo com o tempo do pedido de IO
+[X] Definir tempos dos IO

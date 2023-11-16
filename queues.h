@@ -29,7 +29,8 @@ typedef struct Queue
     struct Queue* next;
 }queue;
 queue *new_q(proc process); /*Creates a new queue*/
-void Add_q(queue **first,proc process); /*Adds a new process to an queue, or creates an queue if there isn't one*/
+void Add_q(queue **nova,proc process); /*Adds a new process to an queue, or creates an queue if there isn't one*/
 void print(queue *imprimir,char *frase); /*Prints an queue from beginning to end*/
 void printc(queue *imprimir,char *frase);
 proc pop(queue**first); /*Pops a process out of an queue*/
+io popIO(io **sai);

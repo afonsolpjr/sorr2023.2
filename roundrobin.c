@@ -130,6 +130,7 @@ void RoundRobin (OS kernel)
     while(verifica_filas_vazias(&kernel)==0)
     {
         finish_job(&kernel,time); /*retirar o processo da CPU finalizando-o*/
+        verifica_request(&kernel);
         long_term(&kernel,time); /*Admite processos na fila de mais alta prioridade*/
         atualizar_tempo_io(&kernel); /* retirar processos da fila de bloqueio*/
         if(slice == QUANTUM)
