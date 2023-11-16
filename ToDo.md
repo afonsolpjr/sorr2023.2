@@ -70,3 +70,9 @@ Premissas - Processos sem prioridade inerente (todos chegam com a mesma prioried
 Possiveis Adições:
     -[]Filas da memória estáticas
     -[]Processos Suspensos
+
+Conserto:
+
+[] Criar função de ordenação
+[] Comparar o tempo decorrido do processo com o tempo do pedido de IO
+[] Definir tempos dos IO
