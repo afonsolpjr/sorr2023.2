@@ -41,18 +41,21 @@ void long_term(OS *kernel, int time) /*Changes a process from new state to ready
     }
 }
 
-void go_processing(OS *kernel) /*Changes a process from ready state to running state*/
+int go_processing(OS *kernel) /*Changes a process from ready state to running state*/
 {
     if(kernel->p_alta!=NULL && kernel->executing == NULL)
     {
         Add_q(&kernel->executing,pop(&kernel->p_alta));
         kernel->executing->process.state=RODANDO;
+        return 1;
     }
     else if(kernel -> p_baixa!=NULL && kernel -> executing == NULL)
     {
         Add_q(&kernel->executing,pop(&kernel->p_baixa));
         kernel->executing->process.state=RODANDO;
+        return 1;
     }
+    return 0;
     
 }
 

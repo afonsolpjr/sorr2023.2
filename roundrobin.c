@@ -139,7 +139,10 @@ void RoundRobin (OS kernel)
             slice = 0;
         }
         sobe_prioridade(&kernel,QUANTUM);
-        go_processing(&kernel); /* aloca novos processos no processador*/
+        if(go_processing(&kernel)== 1) /* aloca novos processos no processador*/
+        {
+            slice = 0; /*zera o slice*/
+        }
         if((&kernel)->executing != NULL)
         {
             (&kernel)->executing->process.remaining_time-=1;
