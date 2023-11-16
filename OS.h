@@ -6,6 +6,7 @@
 #define RODANDO 1
 #define IO 2
 #define TERMINADO 3
+
 typedef struct Operational_system
 {
     queue *new_jobs;

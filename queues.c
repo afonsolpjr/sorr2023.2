@@ -6,7 +6,9 @@ state 0 = not running
 state 1 = running
 state 2 = blocked
 */
-queue *new_q(proc process) /*Creates a new queue*/
+
+/*Creates a new queue*/
+queue *new_q(proc process) 
 {
     queue *newer;
     if((newer = (queue *) malloc(sizeof(queue)))==NULL)
@@ -19,7 +21,8 @@ queue *new_q(proc process) /*Creates a new queue*/
     return newer;
 }
 
-void Add_q(queue **first,proc process) /*Adds a new process to an queue, or creates an queue if there isn't one*/
+ /*Adds a new process to an queue, or creates an queue if there isn't one*/
+void Add_q(queue **first,proc process)
 {
     if(*first==NULL)
     {
@@ -38,8 +41,9 @@ void Add_q(queue **first,proc process) /*Adds a new process to an queue, or crea
         *first = check;
     }
 }
-void print(queue *waiting,char *frase) /*Prints an queue from beginning to end*/
-{
+
+/*Prints an queue from beginning to end*/
+void print(queue *waiting,char *frase) {
     if(waiting !=NULL)
     {
         printf("%s",frase);
@@ -55,7 +59,9 @@ void print(queue *waiting,char *frase) /*Prints an queue from beginning to end*/
     }
         puts("");
 }
-proc pop(queue**first) /*Pops a process out of an queue*/
+
+/*Pops a process out of an queue*/
+proc pop(queue**first) 
 {
     proc removido;
     removido = (*first)->process;

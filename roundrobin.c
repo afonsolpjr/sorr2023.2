@@ -1,7 +1,9 @@
 #include "OS.h"
 #include <string.h>
-#define QUANTUM 4
-void queue_situation(OS kernel,int time,int quantum) /*Display queues situation on terminal*/
+#define QUANTUM 3
+
+/*Display queues situation on terminal*/
+void queue_situation(OS kernel,int time,int quantum) 
 {
     printf("---------------------------\nTempo corrido: %d\nQuantum: %d\nSituation:\n",time,quantum);
     print(kernel.new_jobs,"New queue -> ");
@@ -19,7 +21,8 @@ void queue_situation(OS kernel,int time,int quantum) /*Display queues situation 
     else print(kernel.executing,"Executing-> ");
 }
 
-proc create_process(int number, char * linha) /*Creates a single process*/
+/*Creates a single process*/
+proc create_process(int number, char * linha) 
 {   
     int i;
     char *token;
@@ -62,7 +65,8 @@ proc create_process(int number, char * linha) /*Creates a single process*/
     
 }
 
-OS preparation(OS kernel,int number_process) /*Adds all the processes in the file "Processes" in the queue*/
+/*Adds all the processes in the file "Processes" in the queue*/
+OS preparation(OS kernel,int number_process) 
 {
     int i;
     char linha[100];

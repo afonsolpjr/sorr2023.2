@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-typedef struct Process /*Structure of an process*/
+
+/*Structure of an process*/
+typedef struct Process 
 {
     int admission_time;
-    int PID;  /* renomear pra PID? */
+    int PID;  
     int service_time;
     int remaining_time;
     int finish_time;
@@ -20,7 +22,8 @@ typedef struct IO
     struct IO *prox_io;
 } io;
 
-typedef struct Queue /*Queue data structure*/
+/*Queue data structure*/
+typedef struct Queue 
 {
     proc process;
     struct Queue* next;
