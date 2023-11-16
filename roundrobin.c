@@ -49,14 +49,27 @@ proc create_process(int number, char * linha)
             new_io->tipo = tipo;
             new_io->instante = instante;
             new_io->prox_io = NULL;
+            /*Sorted insertions of IO by request time */
             if(new_processo.fila_io == NULL){
                 new_processo.fila_io = new_io;
-            } else{
+            } 
+            else
+            {
                 temp = new_processo.fila_io;
-                while(temp->prox_io != NULL){
-                    temp=temp->prox_io;
+                if(new_io->instante < temp->instante)
+                {
+                    new_io->prox_io = temp;
+                    new_processo.fila_io = new_io;
                 }
-                temp->prox_io = new_io;
+                else
+                {
+                    while(temp->prox_io!= NULL 
+                        && 
+                        new_io->instante >= temp->prox_io->instante)
+                        temp = temp->prox_io;
+                    new_io->prox_io = temp->prox_io;
+                    temp->prox_io  = new_io;
+                }
             }
         }
         token = strtok(NULL, " ");
@@ -78,7 +91,7 @@ OS preparation(OS kernel,int number_process)
         fgets(linha, 100, stdin);
         new_proc = create_process(i,linha);
 
-        /* Insertion Sort on new_jobs queue*/
+        /* Sorted Insertion on new_jobs queue*/
         to_add = new_q(new_proc);
         if(kernel.new_jobs==NULL)
         {
