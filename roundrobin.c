@@ -1,24 +1,24 @@
 #include "OS.h"
 #include <string.h>
-#define QUANTUM 3
+#define QUANTUM 2
 
 /*Display queues situation on terminal*/
 void queue_situation(OS kernel,int time,int quantum) 
 {
-    printf("---------------------------\nTempo corrido: %d\nQuantum: %d\nSituation:\n",time,quantum);
-    printc(kernel.new_jobs,"New queue -> ");
-    print(kernel.p_alta,"p_alta queue -> ");
-    print(kernel.p_baixa,"p_baixa queue -> ");
-    printc(kernel.finished,"Finished queue -> ");
-    printc(kernel.impressora,"Impressora queue-> ");
-    printc(kernel.fita,"Fita queue-> ");
-    printc(kernel.disco,"Disco queue-> ");
-    if(kernel.executing!=NULL)
+    printf("---------------------------\nTempo corrido: %d\nFatia: %d\nSituacao:\n",time,quantum);
+    imprime_condicional(kernel.novos_processos,"Processos Novos -> ");
+    imprime(kernel.p_alta,"Prioridade Alta -> ");
+    imprime(kernel.p_baixa,"Prioridade Baixa -> ");
+    imprime_condicional(kernel.finalizados,"Finalizados -> ");
+    imprime_condicional(kernel.impressora,"Fila Impressora-> ");
+    imprime_condicional(kernel.fita,"Fila Fita-> ");
+    imprime_condicional(kernel.disco,"Fila Disco-> ");
+    if(kernel.executando!=NULL)
     {
-        printf("Process running:%d\nRemaining Time:%d\n",kernel.executing->process.PID,
-        kernel.executing->process.remaining_time);
+        printf("Processo Executando ->%d\nTempo de serviço restante:%d\n",kernel.executando->process.PID,
+        kernel.executando->process.tempo_restante);
     }
-    else print(kernel.executing,"Executing-> ");
+    else imprime(kernel.executando,"Processador-> ");
 }
 
 /*Creates a single process*/
@@ -34,11 +34,11 @@ proc create_process(int number, char * linha)
     new_processo.PID=number;
     token = strtok(linha, " ");
     num_admissao = atoi(token);
-    new_processo.admission_time = num_admissao;
+    new_processo.tempo_admissao = num_admissao;
     token = strtok(NULL, " ");
     num_servico = atoi(token);
-    new_processo.service_time = num_servico;
-    new_processo.remaining_time=new_processo.service_time;
+    new_processo.tempo_servico = num_servico;
+    new_processo.tempo_restante=new_processo.tempo_servico;
     token = strtok(NULL, " ");
     for(i=0; token != NULL; i++){
         if(i % 2 == 0){
@@ -91,24 +91,24 @@ OS preparation(OS kernel,int number_process)
         fgets(linha, 100, stdin);
         new_proc = create_process(i,linha);
 
-        /* Sorted Insertion on new_jobs queue*/
-        to_add = new_q(new_proc);
-        if(kernel.new_jobs==NULL)
+        /* Sorted Insertion on novos_processos queue*/
+        to_add = cria_fila(new_proc);
+        if(kernel.novos_processos==NULL)
         {
-            kernel.new_jobs = to_add;
+            kernel.novos_processos = to_add;
         }
         else
         {
-            if(new_proc.admission_time < kernel.new_jobs->process.admission_time)
+            if(new_proc.tempo_admissao < kernel.novos_processos->process.tempo_admissao)
             {
-                to_add->next = kernel.new_jobs;
-                kernel.new_jobs = to_add;
+                to_add->next = kernel.novos_processos;
+                kernel.novos_processos = to_add;
             }
             else
             {
-                check = kernel.new_jobs;
+                check = kernel.novos_processos;
                 while(check->next!=NULL 
-                && new_proc.admission_time>=check->next->process.admission_time)
+                && new_proc.tempo_admissao>=check->next->process.tempo_admissao)
                 {
                     check = check->next;
                 }
@@ -117,7 +117,7 @@ OS preparation(OS kernel,int number_process)
             }
             
         }
-        /* Add_q(&kernel.new_jobs,create_process(i, linha));Creates an process to be scheduled*/
+        /* Add_q(&kernel.novos_processos,create_process(i, linha));Creates an process to be scheduled*/
     }
     
     return kernel;
@@ -129,9 +129,9 @@ void RoundRobin (OS kernel)
     int slice=0;
     while(verifica_filas_vazias(&kernel)==0)
     {
-        finish_job(&kernel,time); /*retirar o processo da CPU finalizando-o*/
-        verifica_request(&kernel);
-        long_term(&kernel,time); /*Admite processos na fila de mais alta prioridade*/
+        finaliza_processo(&kernel,time); /*retirar o processo da CPU finalizando-o*/
+        verifica_pedido(&kernel);
+        longo_termo(&kernel,time); /*Admite processos na fila de mais alta prioridade*/
         atualizar_tempo_io(&kernel); /* retirar processos da fila de bloqueio*/
         if(slice == QUANTUM)
         {
@@ -139,13 +139,13 @@ void RoundRobin (OS kernel)
             slice = 0;
         }
         sobe_prioridade(&kernel,QUANTUM);
-        if(go_processing(&kernel)== 1) /* aloca novos processos no processador*/
+        if(processar(&kernel)== 1) /* aloca novos processos no processador*/
         {
             slice = 0; /*zera o slice*/
         }
-        if((&kernel)->executing != NULL)
+        if((&kernel)->executando != NULL)
         {
-            (&kernel)->executing->process.remaining_time-=1;
+            (&kernel)->executando->process.tempo_restante-=1;
         }
         time++;
         slice++;
@@ -162,13 +162,13 @@ int main()
     kernel = preparation(kernel,qtd_proc);
     RoundRobin(kernel);
 
-    free(kernel.finished);
+    free(kernel.finalizados);
     free(kernel.p_alta);
     free(kernel.p_baixa);
-    free(kernel.new_jobs);
+    free(kernel.novos_processos);
     free(kernel.disco);
     free(kernel.fita);
     free(kernel.impressora);
-    free(kernel.executing);
+    free(kernel.executando);
     return 0;
 }

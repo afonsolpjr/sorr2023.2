@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include "queues.h"
 /*
-state 0 = not running
-state 1 = running
-state 2 = blocked
+estado 0 = not running
+estado 1 = running
+estado 2 = blocked
 */
 
 /*Creates a new queue*/
-queue *new_q(proc process) 
+queue *cria_fila(proc process) 
 {
     queue *newer;
     if((newer = (queue *) malloc(sizeof(queue)))==NULL)
@@ -26,7 +26,7 @@ void Add_q(queue **nova,proc process)
 {
     if(*nova==NULL)
     {
-        *nova = new_q(process);
+        *nova = cria_fila(process);
     }
     
     else
@@ -37,13 +37,13 @@ void Add_q(queue **nova,proc process)
         {
             (*save) = (*save)->next;
         }
-        (*save)->next=new_q(process);
+        (*save)->next=cria_fila(process);
         *nova = check;
     }
 }
 
 /*Prints an queue from beginning to end*/
-void print(queue *imprimir,char *frase) {
+void imprime(queue *imprimir,char *frase) {
     if(imprimir !=NULL)
     {
         printf("%s",frase);
@@ -59,11 +59,11 @@ void print(queue *imprimir,char *frase) {
     }
         puts("");
 }
-void printc(queue *imprimir,char *frase)
+void imprime_condicional(queue *imprimir,char *frase)
 {
     if(imprimir != NULL)
     {
-        print(imprimir,frase);
+        imprime(imprimir,frase);
     }
 }
 /*Pops a process out of an queue*/

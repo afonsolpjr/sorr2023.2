@@ -3,56 +3,56 @@
 OS start_OS() /*Starts all the values default values*/
 {
     OS kernel;
-    kernel.finished= NULL;
+    kernel.finalizados= NULL;
     kernel.p_alta=NULL;
     kernel.p_baixa=NULL;
-    kernel.new_jobs = NULL;
+    kernel.novos_processos = NULL;
     kernel.disco=NULL;
     kernel.fita=NULL;
     kernel.impressora=NULL;
-    kernel.executing = NULL;
+    kernel.executando = NULL;
     return kernel;
 }
 
-void finish_job(OS *kernel, int time) /*Changes a job from processor to finished queue*/
+void finaliza_processo(OS *kernel, int time) /*Changes a job from processor to finalizados queue*/
 {
-    if(kernel->executing!=NULL)
+    if(kernel->executando!=NULL)
     {
-        if(kernel->executing->process.remaining_time == 0 && kernel->executing->process.state==RODANDO)
+        if(kernel->executando->process.tempo_restante == 0 && kernel->executando->process.estado==RODANDO)
         {
-            kernel->executing->process.finish_time=time;
-            kernel->executing->process.state = TERMINADO;   
-            Add_q(&(kernel->finished),(kernel->executing->process));
-            kernel->executing=NULL;
+            kernel->executando->process.tempo_finalizacao=time;
+            kernel->executando->process.estado = TERMINADO;   
+            Add_q(&(kernel->finalizados),(kernel->executando->process));
+            kernel->executando=NULL;
         }
     }
 }
 
-void long_term(OS *kernel, int time) /*Changes a process from new state to ready state*/
+void longo_termo(OS *kernel, int time) /*Changes a process from new estado to ready estado*/
 {
-    if(kernel->new_jobs!=NULL)
+    if(kernel->novos_processos!=NULL)
     {
-        while(kernel->new_jobs->process.admission_time == time)
+        while(kernel->novos_processos->process.tempo_admissao == time)
         {
-            kernel->new_jobs->process.state=PRONTO;
-            Add_q(&kernel->p_alta,pop(&kernel->new_jobs));
-            if(kernel->new_jobs==NULL) break;
+            kernel->novos_processos->process.estado=PRONTO;
+            Add_q(&kernel->p_alta,pop(&kernel->novos_processos));
+            if(kernel->novos_processos==NULL) break;
         }
     }
 }
 
-int go_processing(OS *kernel) /*Changes a process from ready state to running state*/
+int processar(OS *kernel) /*Changes a process from ready estado to running estado*/
 {
-    if(kernel->p_alta!=NULL && kernel->executing == NULL)
+    if(kernel->p_alta!=NULL && kernel->executando == NULL)
     {
-        Add_q(&kernel->executing,pop(&kernel->p_alta));
-        kernel->executing->process.state=RODANDO;
+        Add_q(&kernel->executando,pop(&kernel->p_alta));
+        kernel->executando->process.estado=RODANDO;
         return 1;
     }
-    else if(kernel -> p_baixa!=NULL && kernel -> executing == NULL)
+    else if(kernel -> p_baixa!=NULL && kernel -> executando == NULL)
     {
-        Add_q(&kernel->executing,pop(&kernel->p_baixa));
-        kernel->executing->process.state=RODANDO;
+        Add_q(&kernel->executando,pop(&kernel->p_baixa));
+        kernel->executando->process.estado=RODANDO;
         return 1;
     }
     return 0;
@@ -60,43 +60,43 @@ int go_processing(OS *kernel) /*Changes a process from ready state to running st
 }
 
 
-void IO_request(OS *kernel,int tipo)
+void pedido_IO(OS *kernel,int tipo)
 {
-    kernel->executing->process.state = TERMINADO;
-    popIO(&kernel->executing->process.fila_io);
+    kernel->executando->process.estado = TERMINADO;
+    popIO(&kernel->executando->process.fila_io);
     
     switch(tipo)
     {
         case(DISCO):
-            kernel->executing->process.tempo_restante_io=T_DISCO;
-            Add_q(&kernel->disco,kernel->executing->process);
+            kernel->executando->process.tempo_restante_io=T_DISCO;
+            Add_q(&kernel->disco,kernel->executando->process);
             break;
         
         case(FITA) :
-            kernel->executing->process.tempo_restante_io=T_FITA;
-            Add_q(&kernel->fita,kernel->executing->process);
+            kernel->executando->process.tempo_restante_io=T_FITA;
+            Add_q(&kernel->fita,kernel->executando->process);
             break;
         
         case(IMPRESSORA) :
-            kernel->executing->process.tempo_restante_io=T_IMPRESSORA;
-            Add_q(&kernel->impressora,kernel->executing->process);
+            kernel->executando->process.tempo_restante_io=T_IMPRESSORA;
+            Add_q(&kernel->impressora,kernel->executando->process);
             break;
         
     }
-    kernel->executing = NULL;
+    kernel->executando = NULL;
 }
 
-void verifica_request(OS *kernel)
+void verifica_pedido(OS *kernel)
 {
     int tempo_executando;
-    if(kernel->executing!=NULL)
+    if(kernel->executando!=NULL)
     {
-        if(kernel->executing->process.fila_io!=NULL)
+        if(kernel->executando->process.fila_io!=NULL)
         {
-            tempo_executando = kernel->executing->process.service_time-kernel->executing->process.remaining_time;
-            if(tempo_executando == kernel->executing->process.fila_io->instante)
+            tempo_executando = kernel->executando->process.tempo_servico-kernel->executando->process.tempo_restante;
+            if(tempo_executando == kernel->executando->process.fila_io->instante)
             {
-                IO_request(kernel,kernel->executing->process.fila_io->tipo);
+                pedido_IO(kernel,kernel->executando->process.fila_io->tipo);
             }
         }
     }
@@ -105,7 +105,7 @@ void atualizar_tempo_io(OS *kernel) {
     if(kernel->impressora!=NULL){
         kernel->impressora->process.tempo_restante_io--;
         if(kernel->impressora->process.tempo_restante_io == 0){
-            kernel->impressora->process.state=PRONTO;
+            kernel->impressora->process.estado=PRONTO;
             Add_q(&kernel->p_alta, pop(&kernel->impressora));
         }
     }
@@ -113,7 +113,7 @@ void atualizar_tempo_io(OS *kernel) {
     if(kernel->disco!=NULL){
         kernel->disco->process.tempo_restante_io--;
         if(kernel->disco->process.tempo_restante_io == 0){
-            kernel->disco->process.state=PRONTO;
+            kernel->disco->process.estado=PRONTO;
             Add_q(&kernel->p_baixa, pop(&kernel->disco));
         }
     }
@@ -121,16 +121,16 @@ void atualizar_tempo_io(OS *kernel) {
     if(kernel->fita!=NULL){
         kernel->fita->process.tempo_restante_io--;
         if(kernel->fita->process.tempo_restante_io == 0){
-            kernel->fita->process.state=PRONTO;
+            kernel->fita->process.estado=PRONTO;
             Add_q(&kernel->p_alta, pop(&kernel->fita));
         }
     }
 }
 
 int verifica_filas_vazias(OS *kernel) {
-    if(kernel->p_alta == NULL && kernel->p_baixa == NULL && kernel->new_jobs == NULL
+    if(kernel->p_alta == NULL && kernel->p_baixa == NULL && kernel->novos_processos == NULL
     && kernel->disco == NULL && kernel->fita == NULL &&
-    kernel->impressora == NULL && kernel->executing == NULL)
+    kernel->impressora == NULL && kernel->executando == NULL)
         return 1;
     else
         return 0;
@@ -138,10 +138,10 @@ int verifica_filas_vazias(OS *kernel) {
 
 void preempt(OS *kernel)
 {
-    if(kernel ->executing !=NULL)
+    if(kernel ->executando !=NULL)
     {
-        kernel->executing->process.state=PRONTO;
-        Add_q(&kernel->p_baixa,pop(&kernel->executing));
+        kernel->executando->process.estado=PRONTO;
+        Add_q(&kernel->p_baixa,pop(&kernel->executando));
     }
 }
 

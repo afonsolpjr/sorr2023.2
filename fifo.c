@@ -3,19 +3,19 @@
 #include <stdlib.h>
 void queue_situation(OS kernel) /*Display queues situation on terminal*/
 {
-    print(kernel.new_jobs,"New queue -> ");
-    print(kernel.p_alta,"p_alta queue -> ");
-    print(kernel.p_baixa,"p_baixa queue -> ");
-    print(kernel.finished,"Finished queue -> ");
-    print(kernel.impressora,"Impressora queue-> ");
-    print(kernel.fita,"Fita queue-> ");
-    print(kernel.disco,"Disco queue-> ");
-    if(kernel.executing!=NULL)
+    imprime(kernel.novos_processos,"New queue -> ");
+    imprime(kernel.p_alta,"p_alta queue -> ");
+    imprime(kernel.p_baixa,"p_baixa queue -> ");
+    imprime(kernel.finalizados,"finalizados queue -> ");
+    imprime(kernel.impressora,"Impressora queue-> ");
+    imprime(kernel.fita,"Fita queue-> ");
+    imprime(kernel.disco,"Disco queue-> ");
+    if(kernel.executando!=NULL)
     {
-        printf("Process running:%d\nRemaining Time:%d\n",kernel.executing->process.PID,
-        kernel.executing->process.remaining_time);
+        printf("Process running:%d\nRemaining Time:%d\n",kernel.executando->process.PID,
+        kernel.executando->process.tempo_restante);
     }
-    else print(kernel.executing,"Executing-> ");
+    else imprime(kernel.executando,"executando-> ");
 }
 
 proc create_process(int number, char * linha) /*Creates a single process*/
@@ -30,11 +30,11 @@ proc create_process(int number, char * linha) /*Creates a single process*/
     new_processo.PID=number;
     token = strtok(linha, " ");
     num_admissao = atoi(token);
-    new_processo.admission_time = num_admissao;
+    new_processo.tempo_admissao = num_admissao;
     token = strtok(NULL, " ");
     num_servico = atoi(token);
-    new_processo.service_time = num_servico;
-    new_processo.remaining_time=new_processo.service_time;
+    new_processo.tempo_servico = num_servico;
+    new_processo.tempo_restante=new_processo.tempo_servico;
     token = strtok(NULL, " ");
     for(i=0; token != NULL; i++){
         if(i % 2 == 0){
@@ -60,7 +60,7 @@ proc create_process(int number, char * linha) /*Creates a single process*/
 
     /*printf("PROCESSO CRIADO COM SUCESSO\n");
     printf("--------------------------------\n");
-    printf("admissão: %d\ntempo de serviço: %d\npid: %d\nremaining time: %d", new_processo.admission_time, new_processo.service_time, new_processo.PID, new_processo.remaining_time);
+    printf("admissão: %d\ntempo de serviço: %d\npid: %d\nremaining time: %d", new_processo.tempo_admissao, new_processo.tempo_servico, new_processo.PID, new_processo.tempo_restante);
     printf("\nlista io:\n");
     temp = new_processo.fila_io;
     while(temp != NULL){
@@ -72,13 +72,13 @@ proc create_process(int number, char * linha) /*Creates a single process*/
     
 }
 
-int pc(OS kernel) /*Counts how many processes have finished*/
+int pc(OS kernel) /*Counts how many processes have finalizados*/
 {
     int contador=0;
-    while(kernel.finished!=NULL)
+    while(kernel.finalizados!=NULL)
     {
         contador++;
-        kernel.finished = kernel.finished->next;
+        kernel.finalizados = kernel.finalizados->next;
     }
     return contador;
 }
@@ -90,12 +90,12 @@ void fifo(OS kernel,int proc_n) /*FCFS scheduling algorithm*/
     {
         time++;
         
-        finish_job(&kernel,time);
-        long_term(&kernel,time);
-        go_processing(&kernel);
-        if(kernel.executing!=NULL)
+        finaliza_processo(&kernel,time);
+        longo_termo(&kernel,time);
+        processar(&kernel);
+        if(kernel.executando!=NULL)
         {
-            kernel.executing->process.remaining_time-=1;
+            kernel.executando->process.tempo_restante-=1;
         }
         printf("---------------------------\nUnity time: %d\nSituation:\n",time);
         queue_situation(kernel);
@@ -114,24 +114,24 @@ OS preparation(OS kernel,int number_process) /*Adds all the processes in the fil
         fgets(linha, 100, stdin);
         new_proc = create_process(i,linha);
 
-        /* Insertion Sort on new_jobs queue*/
-        to_add = new_q(new_proc);
-        if(kernel.new_jobs==NULL)
+        /* Insertion Sort on novos_processos queue*/
+        to_add = cria_fila(new_proc);
+        if(kernel.novos_processos==NULL)
         {
-            kernel.new_jobs = to_add;
+            kernel.novos_processos = to_add;
         }
         else
         {
-            if(new_proc.admission_time < kernel.new_jobs->process.admission_time)
+            if(new_proc.tempo_admissao < kernel.novos_processos->process.tempo_admissao)
             {
-                to_add->next = kernel.new_jobs;
-                kernel.new_jobs = to_add;
+                to_add->next = kernel.novos_processos;
+                kernel.novos_processos = to_add;
             }
             else
             {
-                check = kernel.new_jobs;
+                check = kernel.novos_processos;
                 while(check->next!=NULL 
-                && new_proc.admission_time>=check->next->process.admission_time)
+                && new_proc.tempo_admissao>=check->next->process.tempo_admissao)
                 {
                     check = check->next;
                 }
@@ -140,7 +140,7 @@ OS preparation(OS kernel,int number_process) /*Adds all the processes in the fil
             }
             
         }
-        // Add_q(&kernel.new_jobs,create_process(i, linha)); /*Creates an process to be scheduled*/
+        // Add_q(&kernel.novos_processos,create_process(i, linha)); /*Creates an process to be scheduled*/
     }
     
     return kernel;
@@ -153,9 +153,9 @@ int main(int argc , char *argv[])
     kernel = start_OS();
     kernel = preparation(kernel,qtd_proc);
     fifo(kernel,qtd_proc);
-    free(kernel.new_jobs);
-    free(kernel.finished);
+    free(kernel.novos_processos);
+    free(kernel.finalizados);
     free(kernel.p_alta);
-    free(kernel.executing);
+    free(kernel.executando);
     return 0;
 }
