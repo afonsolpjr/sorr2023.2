@@ -131,15 +131,21 @@ void RoundRobin (OS kernel)
     int slice=0;
     while(verifica_filas_vazias(&kernel)==0)
     {
-        finaliza_processo(&kernel,time); /*retirar o processo da CPU finalizando-o*/
-        verifica_pedido(&kernel);
+        if((&kernel)->executando!=NULL)
+        {
+            if(finaliza_processo(&kernel,time)) /*retirar o processo da CPU finalizando-o*/
+                continue;
+            if(verifica_pedido(&kernel))
+                continue;
+            if(slice == QUANTUM)
+            {
+                preempt(&kernel);
+                slice = 0;
+            }
+        }
         longo_termo(&kernel,time); /*Admite processos na fila de mais alta prioridade*/
         atualizar_tempo_io(&kernel); /* retirar processos da fila de bloqueio*/
-        if(slice == QUANTUM)
-        {
-            preempt(&kernel);
-            slice = 0;
-        }
+        
         sobe_prioridade(&kernel,QUANTUM);
         if(processar(&kernel)== 1) /* aloca novos processos no processador*/
         {

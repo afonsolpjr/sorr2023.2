@@ -25,7 +25,7 @@ typedef struct Operational_system
 OS start_OS(); /*Starts all the values default values*/
 
 /*Gerência de Fila */
-void finaliza_processo(OS *kernel, int time);/*Finaliza o processo sendo executado*/
+int finaliza_processo(OS *kernel, int time);/*Finaliza o processo sendo executado*/
 void longo_termo(OS *kernel, int time); /*Admite um processo na fila de prontos*/
 int processar(OS *kernel); /*Transfere um programa pro processador*/
 int verifica_filas_vazias(OS *kernel); /*Verifica se todas as filas estão vazias*/
@@ -36,4 +36,4 @@ void sobe_prioridade(OS *kernel, int quantum); /*Se o processo estiver a mais de
 void pedido_IO(OS *kernel,int tipo); /*Trata o pedido de IO do processo*/
 void atualizar_tempo_io(OS *kernel); /*Atualiza o tempo de IO dos processos que estão nas filas 
 e se terminar manda pra fila correta*/
-void verifica_pedido(OS *kernel); /*Verifica se o processo pediu IO*/
+int verifica_pedido(OS *kernel); /*Verifica se o processo pediu IO*/

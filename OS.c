@@ -14,20 +14,19 @@ OS start_OS() /*Starts all the values default values*/
     return kernel;
 }
 
-void finaliza_processo(OS *kernel, int time) /*Changes a job from processor to finalizados queue*/
+int finaliza_processo(OS *kernel, int time) /*Changes a job from processor to finalizados queue*/
 {
-    if(kernel->executando!=NULL)
+    if(kernel->executando->process.tempo_restante == 0 && kernel->executando->process.estado==RODANDO)
     {
-        if(kernel->executando->process.tempo_restante == 0 && kernel->executando->process.estado==RODANDO)
-        {
-            kernel->executando->process.tempo_finalizacao=time;
-            kernel->executando->process.estado = TERMINADO;   
-            Add_q(&(kernel->finalizados),(kernel->executando->process));
-            kernel->executando=NULL;
-            printf("\nProcesso %d finalizado em %d\n",
-            kernel->finalizados->process.PID,time);
-        }
+        kernel->executando->process.tempo_finalizacao=time;
+        kernel->executando->process.estado = TERMINADO;   
+        Add_q(&(kernel->finalizados),(kernel->executando->process));
+        kernel->executando=NULL;
+        printf("\nProcesso %d finalizado em %d\n",
+        kernel->finalizados->process.PID,time);
+        return 1;
     }
+    return 0;
 }
 
 void longo_termo(OS *kernel, int time) /*Changes a process from new estado to ready estado*/
@@ -89,20 +88,19 @@ void pedido_IO(OS *kernel,int tipo)
 }
 
 /* Verifica se o processo ativo vai pedir uma operação de E/S no instante atual */
-void verifica_pedido(OS *kernel)
+int verifica_pedido(OS *kernel)
 {
     int tempo_executando;
-    if(kernel->executando!=NULL)
+    if(kernel->executando->process.fila_io!=NULL)
     {
-        if(kernel->executando->process.fila_io!=NULL)
+        tempo_executando = kernel->executando->process.tempo_servico-kernel->executando->process.tempo_restante;
+        if(tempo_executando == kernel->executando->process.fila_io->instante)
         {
-            tempo_executando = kernel->executando->process.tempo_servico-kernel->executando->process.tempo_restante;
-            if(tempo_executando == kernel->executando->process.fila_io->instante)
-            {
-                pedido_IO(kernel,kernel->executando->process.fila_io->tipo);
-            }
+            pedido_IO(kernel,kernel->executando->process.fila_io->tipo);
+            return 1;
         }
     }
+    return 0;
 }
 /* Retira processos das filas bloqueadas de I/O */
 void atualizar_tempo_io(OS *kernel) {
