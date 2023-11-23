@@ -24,6 +24,8 @@ void finaliza_processo(OS *kernel, int time) /*Changes a job from processor to f
             kernel->executando->process.estado = TERMINADO;   
             Add_q(&(kernel->finalizados),(kernel->executando->process));
             kernel->executando=NULL;
+            printf("\nProcesso %d finalizado em %d\n",
+            kernel->finalizados->process.PID,time);
         }
     }
 }
@@ -62,7 +64,7 @@ int processar(OS *kernel) /*Changes a process from ready estado to running estad
 
 void pedido_IO(OS *kernel,int tipo)
 {
-    kernel->executando->process.estado = TERMINADO;
+    kernel->executando->process.estado = IO;
     popIO(&kernel->executando->process.fila_io);
     
     switch(tipo)
@@ -86,6 +88,7 @@ void pedido_IO(OS *kernel,int tipo)
     kernel->executando = NULL;
 }
 
+/* Verifica se o processo ativo vai pedir uma operação de E/S no instante atual */
 void verifica_pedido(OS *kernel)
 {
     int tempo_executando;
@@ -101,6 +104,7 @@ void verifica_pedido(OS *kernel)
         }
     }
 }
+/* Retira processos das filas bloqueadas de I/O */
 void atualizar_tempo_io(OS *kernel) {
     if(kernel->impressora!=NULL){
         kernel->impressora->process.tempo_restante_io--;
@@ -144,7 +148,8 @@ void preempt(OS *kernel)
         Add_q(&kernel->p_baixa,pop(&kernel->executando));
     }
 }
-
+/* Checa tempo de espera de processos na baixa prioridade, e sobe a prioridade*/
+/* deles caso estejam lá pelo tempo determinado */
 void sobe_prioridade(OS *kernel, int quantum)
 {
     if(kernel->p_baixa != NULL)
@@ -156,9 +161,7 @@ void sobe_prioridade(OS *kernel, int quantum)
                 Add_q(&kernel->p_alta,pop(&kernel->p_baixa));
             }
             else
-            {
                 break;
-            }
         }
     }
 }

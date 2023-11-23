@@ -1,4 +1,6 @@
-#include "OS.h"
+#include "queues.c"
+#include "OS.c"
+
 #include <string.h>
 #define QUANTUM 2
 
@@ -142,13 +144,14 @@ void RoundRobin (OS kernel)
         if(processar(&kernel)== 1) /* aloca novos processos no processador*/
         {
             slice = 0; /*zera o slice*/
+            verifica_pedido(&kernel); /* caso peça no tempo 0*/
         }
         if((&kernel)->executando != NULL)
         {
             (&kernel)->executando->process.tempo_restante-=1;
+            slice++;
         }
         time++;
-        slice++;
         queue_situation(kernel,time,slice);
     }
 }

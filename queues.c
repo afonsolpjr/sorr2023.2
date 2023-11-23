@@ -75,6 +75,7 @@ proc pop(queue**first)
     return removido;
 }
 
+/* Remove o primeiro pedido de I/O da fila de um processo. */
 io popIO(io **sai)
 {
     io removido;
