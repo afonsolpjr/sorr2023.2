@@ -127,8 +127,12 @@ OS preparation(OS kernel,int number_process)
 
 void RoundRobin (OS kernel)
 {
+    FILE *fileptr;
     int time=0;
     int slice=0;
+
+    fileptr = fopen("saida.txt","w");
+
     while(verifica_filas_vazias(&kernel)==0)
     {
         if((&kernel)->executando!=NULL)
@@ -154,11 +158,15 @@ void RoundRobin (OS kernel)
         {
             (&kernel)->executando->process.tempo_restante-=1;
             slice++;
+            fprintf(fileptr,"%d\n",kernel.executando->process.PID+1);
         }
+        else
+            fputs("0\n",fileptr);
         time++;
 
         queue_situation(kernel,time,slice);
     }
+    fclose(fileptr);
 }
 
 int main()

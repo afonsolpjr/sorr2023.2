@@ -24,8 +24,7 @@ int finaliza_processo(OS *kernel, int time)
         kernel->executando->process.estado = TERMINADO;   
         Add_q(&(kernel->finalizados),(kernel->executando->process));
         kernel->executando=NULL;
-        printf("\nProcesso %d finalizado em %d\n",
-        kernel->finalizados->process.PID,time);
+        
         return 1;
     }
     return 0;
