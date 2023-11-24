@@ -28,7 +28,7 @@ OS start_OS(); /*Starts all the values default values*/
 Retorna 1 ele tenha sido finalizado
 Retorna 0 caso não.*/
 int finaliza_processo(OS *kernel, int time);
-/*Admite um processo na fila de admissão na fila de prontos*/
+/*Admite um processo da fila de admissão na fila de prontos*/
 void longo_termo(OS *kernel, int time); 
 int processar(OS *kernel); /*Transfere um programa pro processador*/
 /*Verifica se todas as filas estão vazias. Retorno: 1 caso filas vazias,
