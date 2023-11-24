@@ -5,9 +5,18 @@
 #define QUANTUM 5
 
 /*Display queues situation on terminal*/
-void queue_situation(OS kernel,int time,int quantum) 
+void queue_situation(OS kernel,int time,int slice) 
 {
-    printf("---------------------------\nTempo corrido: %d\nFatia: %d\nSituacao:\n",time,quantum);
+    printf("---------------------------\nTempo corrido: %d\n",time);
+    if(kernel.executando!=NULL)
+    {
+        printf("Processo Executando -> %d\n"
+            "\tTempo de serviço restante:%d\n"
+            "\tFatia de tempo consumida: %d\n",kernel.executando->process.PID,
+        kernel.executando->process.tempo_restante,slice);
+    }
+    else puts("Processador OCIOSO\n");
+    puts("Estado das filas:\n");
     imprime_condicional(kernel.novos_processos,"Processos Novos -> ");
     imprime(kernel.p_alta,"Prioridade Alta -> ");
     imprime(kernel.p_baixa,"Prioridade Baixa -> ");
@@ -15,12 +24,8 @@ void queue_situation(OS kernel,int time,int quantum)
     imprime_condicional(kernel.impressora,"Fila Impressora-> ");
     imprime_condicional(kernel.fita,"Fila Fita-> ");
     imprime_condicional(kernel.disco,"Fila Disco-> ");
-    if(kernel.executando!=NULL)
-    {
-        printf("Processo Executando ->%d\nTempo de serviço restante:%d\n",kernel.executando->process.PID,
-        kernel.executando->process.tempo_restante);
-    }
-    else imprime(kernel.executando,"Processador-> ");
+    
+    
 }
 
 /*Creates a single process*/
