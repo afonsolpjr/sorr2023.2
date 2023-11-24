@@ -14,7 +14,9 @@ OS start_OS() /*Starts all the values default values*/
     return kernel;
 }
 
-int finaliza_processo(OS *kernel, int time) /*Changes a job from processor to finalizados queue*/
+
+
+int finaliza_processo(OS *kernel, int time)
 {
     if(kernel->executando->process.tempo_restante == 0 && kernel->executando->process.estado==RODANDO)
     {
