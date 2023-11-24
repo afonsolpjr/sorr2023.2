@@ -5,9 +5,9 @@
 #define RODANDO 1
 #define IO 2
 #define TERMINADO 3
-#define T_DISCO 5
-#define T_FITA 10
-#define T_IMPRESSORA 15
+#define T_DISCO 2
+#define T_FITA 4
+#define T_IMPRESSORA 5
 
 typedef struct Operational_system
 {

@@ -2,7 +2,7 @@
 #include "OS.c"
 
 #include <string.h>
-#define QUANTUM 2
+#define QUANTUM 5
 
 /*Display queues situation on terminal*/
 void queue_situation(OS kernel,int time,int quantum) 
@@ -133,15 +133,13 @@ void RoundRobin (OS kernel)
     {
         if((&kernel)->executando!=NULL)
         {
-            if(finaliza_processo(&kernel,time)) /*retirar o processo da CPU finalizando-o*/
-                continue;
-            if(verifica_pedido(&kernel))
-                continue;
-            if(slice == QUANTUM)
-            {
-                preempt(&kernel);
-                slice = 0;
-            }
+            if(!finaliza_processo(&kernel,time)) /*retirar o processo da CPU finalizando-o*/
+                if(!verifica_pedido(&kernel))
+                    if(slice == QUANTUM)
+                    {
+                        preempt(&kernel);
+                        slice = 0;
+                    }
         }
         longo_termo(&kernel,time); /*Admite processos na fila de mais alta prioridade*/
         atualizar_tempo_io(&kernel); /* retirar processos da fila de bloqueio*/
@@ -158,6 +156,7 @@ void RoundRobin (OS kernel)
             slice++;
         }
         time++;
+
         queue_situation(kernel,time,slice);
     }
 }

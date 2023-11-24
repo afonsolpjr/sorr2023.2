@@ -103,29 +103,34 @@ int verifica_pedido(OS *kernel)
     return 0;
 }
 /* Retira processos das filas bloqueadas de I/O */
+
 void atualizar_tempo_io(OS *kernel) {
     if(kernel->impressora!=NULL){
-        kernel->impressora->process.tempo_restante_io--;
+
         if(kernel->impressora->process.tempo_restante_io == 0){
             kernel->impressora->process.estado=PRONTO;
             Add_q(&kernel->p_alta, pop(&kernel->impressora));
         }
+        else 
+            kernel->impressora->process.tempo_restante_io--;
     }
 
     if(kernel->disco!=NULL){
-        kernel->disco->process.tempo_restante_io--;
         if(kernel->disco->process.tempo_restante_io == 0){
             kernel->disco->process.estado=PRONTO;
             Add_q(&kernel->p_baixa, pop(&kernel->disco));
         }
+        else
+            kernel->disco->process.tempo_restante_io--;
     }
 
     if(kernel->fita!=NULL){
-        kernel->fita->process.tempo_restante_io--;
         if(kernel->fita->process.tempo_restante_io == 0){
             kernel->fita->process.estado=PRONTO;
             Add_q(&kernel->p_alta, pop(&kernel->fita));
         }
+        else
+            kernel->fita->process.tempo_restante_io--;
     }
 }
 
